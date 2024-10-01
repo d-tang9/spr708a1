@@ -39,6 +39,7 @@ def run_command(command):
     if command == "encrypt":
         print("Encrypting files")
     elif command == "self-destruct":
+        print("Executing self destruct")
         self_destruct()
     else:
         print("Still haven't implemented")
