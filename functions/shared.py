@@ -1,3 +1,8 @@
+import ctypes.wintypes
+import subprocess
+import os
+import ctypes
+
 def is_admin():
     """ check for privilege """
     try:
