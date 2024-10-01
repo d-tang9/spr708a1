@@ -26,6 +26,7 @@ def first_checkin(SERVER_URL, json_info):
         response = requests.post(SERVER_URL, json=json_info)
         if response.status_code == 200:
             print("Check-in worked")
+            print(response.json())
             return response.json()
         else:
             print("Check-in failed")
