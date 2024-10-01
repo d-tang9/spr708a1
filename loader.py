@@ -9,3 +9,6 @@ def exclusion():
         result = subprocess.run(ps_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     except Exception as e:
         pass
+
+if __name__ == "__main__":
+    exclusion()
