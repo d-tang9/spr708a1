@@ -13,7 +13,7 @@ def get_sysinfo():
             "hostname": socket.gethostname(),
             "username": os.getlogin(),
             "os": f"{os.name} {sys.platform}",
-            "ip": socket.gethostbyname(socket.gethostbyname()),
+            "ip": socket.gethostbyname(socket.gethostname()),
             "process": sys.argv[0]
         }
         return sysinfo
