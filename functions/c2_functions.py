@@ -16,6 +16,7 @@ def get_sysinfo():
             "ip": socket.getaddrinfo,
             "process": sys.argv[0]
         }
+        return sysinfo
     except:
         pass
 
