@@ -5,7 +5,7 @@ import socket
 import json
 import subprocess
 import requests
-from functions.shared import self_destruct
+from shared import self_destruct
 
 def get_sysinfo():
     """ return sys information """
