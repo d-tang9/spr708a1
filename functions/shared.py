@@ -47,6 +47,7 @@ def delete_folder(folder_path):
                 file_path = os.path.join(root, name)
                 wipe_file(file_path, passes=1)
         shutil.rmtree(folder_path)
+        print(f"Deleted {folder_path}")
     except:
         return False
 
